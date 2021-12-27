@@ -1,0 +1,76 @@
+<template>
+    <lightning-card title="Table" icon-name="standard:budget">
+        <template if:true={showSpinner}>
+            <lightning-spinner variant="brand" size="medium" alternative-text="Loading..."></lightning-spinner>
+        </template>
+
+        <lightning-layout multiple-rows="true">
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="3" padding="around-small">
+                <lightning-input type="text" label="Account #" data-id="accountNumber" onkeyup={enterSearch}></lightning-input>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="3" padding="around-small">
+                <lightning-input type="text" label="Name" data-id="name" onkeyup={enterSearch}></lightning-input>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="4" large-device-size="2" padding="around-small">
+                <lightning-combobox label="Industry" data-id="industry" placeholder="Select Industry" options={industryList}></lightning-combobox>
+            </lightning-layout-item>
+            <lightning-layout-item size="6" small-device-size="6" medium-device-size="4" large-device-size="2" padding="around-small">
+                <lightning-input type="number" label="Annual Revenue(From)" data-id="annualRevenueFrom" onkeyup={enterSearch} step="1"></lightning-input>
+            </lightning-layout-item>
+            <lightning-layout-item size="6" small-device-size="6" medium-device-size="4" large-device-size="2" padding="around-small">
+                <lightning-input type="number" label="Annual Revenue(To)" data-id="annualRevenueTo" onkeyup={enterSearch} step="1"></lightning-input>
+            </lightning-layout-item>
+        </lightning-layout>
+        <lightning-layout multiple-rows="true">
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12" padding="around-small" class="slds-text-align_right">
+                <lightning-button variant="brand" label="Search" onclick={getAccountList}></lightning-button>
+            </lightning-layout-item>
+        </lightning-layout>
+
+        <div class="slds-scrollable_x">
+            <table class="slds-table slds-table_bordered slds-table_col-bordered">
+                <thead>
+                <tr>
+                    <th rowspan="2">Account #</th>
+                    <th rowspan="2">Name</th>
+                    <th rowspan="2">Industry</th>
+                    <th rowspan="2">Rating</th>
+                    <th colspan="5" class="slds-text-align_center">Billing</th>
+                    <th rowspan="2">Phone</th>
+                    <th rowspan="2">Fax</th>
+                    <th rowspan="2">Website</th>
+                    <th rowspan="2">Annual Revenue</th>
+                    <th rowspan="2">Description</th>
+                </tr>
+                <tr>
+                    <th class="slds-border_left">Country</th>
+                    <th>State</th>
+                    <th>City</th>
+                    <th>Street</th>
+                    <th>PostalCode</th>
+                </tr>
+                </thead>
+                <tbody>
+                <template for:each={accountList} for:item="account">
+                    <tr key={account.Id}>
+                        <td>{account.AccountNumber}</td>
+                        <td title={account.Name}><a data-record-id={account.Id} onclick={navToRecord}>{account.Name}</a></td>
+                        <td>{account.Industry}</td>
+                        <td>{account.Rating}</td>
+                        <td>{account.BillingCountry}</td>
+                        <td>{account.BillingState}</td>
+                        <td>{account.BillingCity}</td>
+                        <td title={account.BillingStreet}>{account.BillingStreet}</td>
+                        <td>{account.BillingPostalCode}</td>
+                        <td><lightning-formatted-phone value={account.Phone}></lightning-formatted-phone></td>
+                        <td><lightning-formatted-phone value={account.Fax}></lightning-formatted-phone></td>
+                        <td title={account.Website}><lightning-formatted-url value={account.Website}></lightning-formatted-url> </td>
+                        <td><lightning-formatted-number value={account.AnnualRevenue} format-style="currency" currency-code="USD" minimum-fraction-digits="0" maximum-fraction-digits="0"></lightning-formatted-number></td>
+                        <td title={account.Description}>{account.Description}</td>
+                    </tr>
+                </template>
+                </tbody>
+            </table>
+        </div>
+    </lightning-card>
+</template>
